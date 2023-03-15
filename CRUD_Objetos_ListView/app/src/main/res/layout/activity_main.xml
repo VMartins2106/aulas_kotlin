@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="Insira o nome de usuário" />
+
+    <EditText
+        android:id="@+id/userPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="Insira a senha do usuário" />
+
+    <Button
+        android:id="@+id/btnCad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Inserir" />
+
+    <Button
+        android:id="@+id/btnUpd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alterar" />
+
+    <Button
+        android:id="@+id/btnDel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Excluir" />
+    <Button
+        android:id="@+id/btnLimpar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Limpar toda a lista" />
+
+    <ListView
+        android:id="@+id/listViewUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

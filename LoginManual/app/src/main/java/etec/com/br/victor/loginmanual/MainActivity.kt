@@ -1,5 +1,6 @@
 package etec.com.br.victor.loginmanual
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -20,8 +21,10 @@ class MainActivity : AppCompatActivity() {
 
             if(userName.equals("user") && password.equals("pass")){
                 Toast.makeText(applicationContext, "Login OK", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LoginActivity::class.java))
             }else{
                 Toast.makeText(applicationContext, "Login Inválido", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LoginErradoActivity::class.java))
             }
 
             binding.edtUserName.setText("")
