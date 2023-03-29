@@ -10,6 +10,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.recyclerview.widget.LinearLayoutManager
+import etec.com.br.victor.listatelefonica.adapter.ContactListAdapter
+import etec.com.br.victor.listatelefonica.adapter.listener.ContactOnClickListener
 import etec.com.br.victor.listatelefonica.database.DBHelper
 import etec.com.br.victor.listatelefonica.databinding.ActivityMainBinding
 import etec.com.br.victor.listatelefonica.model.ContactModel
@@ -17,7 +21,9 @@ import etec.com.br.victor.listatelefonica.model.ContactModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var contactList: ArrayList<ContactModel>
-    private lateinit var adapter: ArrayAdapter<ContactModel>
+    //USING LIST VIEW
+    //private lateinit var adapter: ArrayAdapter<ContactModel>
+    private lateinit var adapter: ContactListAdapter
     private lateinit var result: ActivityResultLauncher<Intent>
     private lateinit var dbHelper: DBHelper
 
@@ -30,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         dbHelper = DBHelper(this)
         val sharedPreferences = application.getSharedPreferences("login", Context.MODE_PRIVATE)
 
+        binding.recyclerViewContacts.layoutManager = LinearLayoutManager(applicationContext)
+
         binding.btnLogout.setOnClickListener {
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("username", "")
@@ -39,16 +47,18 @@ class MainActivity : AppCompatActivity() {
 
         loadList()
 
+        /*USING LIST VIEW
         binding.listViewContatc.setOnItemClickListener { _, _, position, _ ->
-            Toast.makeText(
+            /*Toast.makeText(
                 applicationContext,
                 "${contactList[position].name}\n${contactList[position].phone}",
                 Toast.LENGTH_SHORT
-            ).show()
+            ).show()*/
             val intent = Intent(applicationContext, ContactDetailActivity::class.java)
             intent.putExtra("id",contactList[position].id)
-            startActivity(intent)
-        }
+            //startActivity(intent)
+            result.launch(intent)
+        }*/
 
         binding.btnAdd.setOnClickListener {
             result.launch(Intent(applicationContext, NewContactActivity::class.java))
@@ -66,12 +76,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadList() {
         contactList = dbHelper.getAllContact()
+        //.sortedWith(compareBy{it.name}
+        adapter = ContactListAdapter(contactList, ContactOnClickListener { contact ->
+            val intent = Intent(applicationContext, ContactDetailActivity::class.java)
+            intent.putExtra("id",contact.id)
+            result.launch(intent)
+        })
+        binding.recyclerViewContacts.adapter = adapter
+
+        /* USING LIST VIEW
+        contactList = dbHelper.getAllContact()
 
         adapter = ArrayAdapter(
             applicationContext,
             android.R.layout.simple_list_item_1,
             contactList
         )
-        binding.listViewContatc.adapter = adapter
+        binding.listViewContatc.adapter = adapter*/
     }
 }

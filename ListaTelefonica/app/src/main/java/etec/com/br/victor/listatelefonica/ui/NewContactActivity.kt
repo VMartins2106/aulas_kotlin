@@ -1,8 +1,11 @@
 package etec.com.br.victor.listatelefonica.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import etec.com.br.victor.listatelefonica.R
 import etec.com.br.victor.listatelefonica.database.DBHelper
 import etec.com.br.victor.listatelefonica.databinding.ActivityNewContactBinding
@@ -10,6 +13,8 @@ import etec.com.br.victor.listatelefonica.databinding.ActivityNewContactBinding
 class NewContactActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewContactBinding
+    private lateinit var launcher: ActivityResultLauncher<Intent>
+    private var id: Int? = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewContactBinding.inflate(layoutInflater)
@@ -23,7 +28,10 @@ class NewContactActivity : AppCompatActivity() {
             val address = binding.edtAddress.text.toString()
             val email = binding.edtEmail.text.toString()
             val phone = binding.edtPhone.text.toString()
-            val imageId = 1
+            var imageId = -1
+            if(id != null){
+                imageId = id as Int
+            }
 
             if(name.isNotEmpty() && address.isNotEmpty() && email.isNotEmpty() && phone.isNotEmpty()){
                 val res = db.insertContact(name, address, email, phone, imageId)
@@ -41,6 +49,19 @@ class NewContactActivity : AppCompatActivity() {
         binding.btnCancel.setOnClickListener {
             setResult(0,i)
             finish()
+        }
+
+        binding.imageContact.setOnClickListener {
+            launcher.launch(Intent(applicationContext, ContactImageSelectionActivity::class.java))
+        }
+        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            if(it.data != null && it.resultCode == 1){
+                id = it.data?.extras?.getInt("id")
+                binding.imageContact.setImageDrawable(resources.getDrawable(id!!))
+            }else if(it.data != null && it.resultCode == 0){
+                id = -1
+                binding.imageContact.setImageResource(R.drawable.padrao)
+            }
         }
     }
 }

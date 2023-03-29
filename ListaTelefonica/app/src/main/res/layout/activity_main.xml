@@ -6,12 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnAdd"
+        android:layout_alignParentTop="true"
+        android:id="@+id/recyclerViewContacts"
+        android:padding="15dp"/>
+    
+    <!--ListView
         android:id="@+id/listViewContatc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/btnAdd"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"/-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnOrder"

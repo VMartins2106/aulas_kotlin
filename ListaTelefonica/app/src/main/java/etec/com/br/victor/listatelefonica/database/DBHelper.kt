@@ -13,8 +13,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
         "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, userName TEXT UNIQUE, userPass TEXT)",
         "INSERT INTO users (userName, userPass) VALUES ('admin', 'password')",
         "CREATE TABLE contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, address TEXT, email TEXT, phone TEXT, imageId INT)",
-        "INSERT INTO contact (name, address, email, phone,imageId) VALUES('Maria', 'Caieiras', 'maria@gmail.com', '11995837482', 1)",
-        "INSERT INTO contact (name, address, email, phone,imageId) VALUES('João', 'Franco', 'joao@gmail.com', '11928748273', 2)",
+        "INSERT INTO contact (name, address, email, phone,imageId) VALUES('Maria', 'Caieiras', 'maria@gmail.com', '11995837482', -1)",
+        "INSERT INTO contact (name, address, email, phone,imageId) VALUES('João', 'Franco', 'joao@gmail.com', '11928748273', -1)",
     )
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -118,7 +118,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
         return res
     }
 
-    fun updateContact(id: Int, name: String, address: String, email: String, phone: Int, imageId: Int): Int {
+    fun updateContact(id: Int, name: String, address: String, email: String, phone: String, imageId: Int): Int {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put("name", name)
@@ -152,6 +152,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
             c.moveToFirst()
             val idIndex = c.getColumnIndex("id")
             val nameIndex = c.getColumnIndex("name")
+            val addressIndex = c.getColumnIndex("address")
             val emailIndex = c.getColumnIndex("email")
             val phoneIndex = c.getColumnIndex("phone")
             val imageIdIndex = c.getColumnIndex("imageId")
@@ -159,6 +160,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "database.db", null
             contactModel = ContactModel(
                 id = c.getInt(idIndex),
                 name = c.getString(nameIndex),
+                address = c.getString(addressIndex),
                 email = c.getString(emailIndex),
                 phone = c.getString(phoneIndex),
                 imageId = c.getInt(imageIdIndex),
