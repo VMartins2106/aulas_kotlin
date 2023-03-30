@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
+import etec.com.br.victor.listatelefonica.R
 import etec.com.br.victor.listatelefonica.adapter.ContactListAdapter
 import etec.com.br.victor.listatelefonica.adapter.listener.ContactOnClickListener
 import etec.com.br.victor.listatelefonica.database.DBHelper
@@ -20,12 +21,13 @@ import etec.com.br.victor.listatelefonica.model.ContactModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var contactList: ArrayList<ContactModel>
+    private lateinit var contactList: List<ContactModel>
     //USING LIST VIEW
     //private lateinit var adapter: ArrayAdapter<ContactModel>
     private lateinit var adapter: ContactListAdapter
     private lateinit var result: ActivityResultLauncher<Intent>
     private lateinit var dbHelper: DBHelper
+    private var ascDesc: Boolean = true
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +65,18 @@ class MainActivity : AppCompatActivity() {
         binding.btnAdd.setOnClickListener {
             result.launch(Intent(applicationContext, NewContactActivity::class.java))
         }
+
+        binding.btnOrder.setOnClickListener {
+            if(ascDesc){
+                binding.btnOrder.setImageResource(R.drawable.ic_baseline_arrow_upward_24)
+            }else{
+                binding.btnOrder.setImageResource(R.drawable.ic_baseline_arrow_downward_24)
+            }
+            ascDesc = !ascDesc
+            contactList = contactList.reversed()
+            placeAdapter()
+        }
+
         result = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if(it.data != null && it.resultCode == 1){
                 loadList()
@@ -74,15 +88,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadList() {
-        contactList = dbHelper.getAllContact()
-        //.sortedWith(compareBy{it.name}
+    private fun placeAdapter(){
         adapter = ContactListAdapter(contactList, ContactOnClickListener { contact ->
             val intent = Intent(applicationContext, ContactDetailActivity::class.java)
             intent.putExtra("id",contact.id)
             result.launch(intent)
         })
         binding.recyclerViewContacts.adapter = adapter
+    }
+
+    private fun loadList() {
+        contactList = dbHelper.getAllContact().sortedWith(compareBy{it.name})
+        placeAdapter()
 
         /* USING LIST VIEW
         contactList = dbHelper.getAllContact()

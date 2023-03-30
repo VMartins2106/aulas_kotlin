@@ -57,7 +57,7 @@ class NewContactActivity : AppCompatActivity() {
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if(it.data != null && it.resultCode == 1){
                 id = it.data?.extras?.getInt("id")
-                binding.imageContact.setImageDrawable(resources.getDrawable(id!!))
+                binding.imageContact.setImageResource(id!!)
             }else if(it.data != null && it.resultCode == 0){
                 id = -1
                 binding.imageContact.setImageResource(R.drawable.padrao)

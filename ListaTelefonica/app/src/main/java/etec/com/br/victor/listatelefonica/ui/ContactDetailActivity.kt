@@ -21,7 +21,7 @@ class ContactDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityContactDetailBinding
 
     private lateinit var launcher: ActivityResultLauncher<Intent>
-    private var imageId: Int? = -1
+    private var imageId: Int = -1
     private lateinit var db: DBHelper
     private val REQUEST_PHONE_CALL = 1
 
@@ -96,7 +96,7 @@ class ContactDetailActivity : AppCompatActivity() {
                 address = binding.edtAddress.text.toString(),
                 email = binding.edtEmail.text.toString(),
                 phone = binding.edtPhone.text.toString(),
-                imageId = contactModel.imageId
+                imageId = imageId
             )
 
             if (res > 0) {
@@ -123,13 +123,18 @@ class ContactDetailActivity : AppCompatActivity() {
             }
         }
 
-        binding.imageContact.setOnClickListener {
-            launcher.launch(Intent(applicationContext, ContactImageSelectionActivity::class.java))
+        binding.imageContact.setOnClickListener{
+            if(binding.edtName.isEnabled){
+                launcher.launch(Intent(applicationContext, ContactImageSelectionActivity::class.java))
+            }
         }
+
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.data != null && it.resultCode == 1) {
-                imageId = it.data?.extras?.getInt("id")
-                binding.imageContact.setImageDrawable(resources.getDrawable(imageId!!))
+                if(it.data?.extras!=null){
+                    imageId = it.data?.getIntExtra("id",0)!!
+                    binding.imageContact.setImageResource(imageId!!)
+                }
             } else if (it.data != null && it.resultCode == 0) {
                 imageId = -1
                 binding.imageContact.setImageResource(R.drawable.padrao)
@@ -151,7 +156,7 @@ class ContactDetailActivity : AppCompatActivity() {
         binding.edtEmail.setText(contactModel.email)
         binding.edtPhone.setText(contactModel.phone.toString())
         if (contactModel.imageId > 0) {
-            binding.imageContact.setImageDrawable(resources.getDrawable(contactModel.imageId))
+            binding.imageContact.setImageResource(contactModel.imageId)
         } else {
             binding.imageContact.setImageResource(R.drawable.padrao)
         }
