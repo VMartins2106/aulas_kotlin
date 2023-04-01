@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LoginMVVM</string>
+    <string name="bem_vindo">Bem-vindo</string>
+    <string name="email">Email (admin)</string>
+    <string name="password">Password (pass)</string>
+    <string name="entrar">Entrar</string>
+</resources>

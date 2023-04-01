@@ -1,0 +1,20 @@
+Modelo MVVM: Model-View-ViewModel
+
+MVVM é um padrão de desenvolvimento de software, isto é, uma solução genérica e
+reutilizável para resolver um problema que acontece numa arquitetura de um
+software dado um contexto.
+
+O objetivo do MVVM é promover uma separação de responsabilidades, entre a view
+e sua lógica, aumentando, entre outros, a testabilidade da aplicação. Uma das
+características do MVVM face ao MVP (Model View Presenter) é a ausência de
+referência da View no ViewModel, sendo esta ligação feita indiretamente através
+de bindings.
+
+View: Entidade responsávle por definir a estrutura, layout e aparência do que
+será exibido. Dentro do nosso contexto, as Views são Activities, Fragments e
+elementos visuais criados.
+Model: Implementação do modelo de domínio da aplicação que inclui o modelo de
+dados, regras de negócio e validações de lógica.
+ViewModel: Camada intermédia entre a View e o Model, é o responsável por manusear
+o Model para ser utilizado pela View. Utiliza o databinding para notificar
+mudanças aos observadores (View).
